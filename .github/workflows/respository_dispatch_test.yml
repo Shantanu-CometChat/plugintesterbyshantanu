@@ -10,8 +10,19 @@ jobs:
     steps:
 
       - name: Send a Slack notification
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          PACKAGE_NAME: ${{ github.event.client_payload.packageName }}
+          VERSION: ${{ github.event.client_payload.version }}
+          REPOSITORY: ${{ github.event.client_payload.repository }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"This is a message from GitHub Actions!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+          PAYLOAD="{
+            'text': 'Package Updated! \n Package Name: $PACKAGE_NAME \n Version: $VERSION \n Repository: $REPOSITORY'
+          }"
+          curl -X POST -H 'Content-type: application/json' --data "$PAYLOAD" $SLACK_WEBHOOK_URL
+
+        # run: |
+        #   curl -X POST -H 'Content-type: application/json' --data '{"text":"This is a message from GitHub Actions!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Dump client payload context
         env:
