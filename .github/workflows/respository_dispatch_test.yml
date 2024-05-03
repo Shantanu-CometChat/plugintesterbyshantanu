@@ -1,0 +1,12 @@
+name: Dispatch Workflow
+
+on:
+  repository_dispatch:
+    types: [triggered-from-another-repo]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
