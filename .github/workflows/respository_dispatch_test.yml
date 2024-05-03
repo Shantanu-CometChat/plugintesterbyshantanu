@@ -8,7 +8,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+
+      - name: Send a Slack notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"This is a message from GitHub Actions!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+
       - name: Dump client payload context
         env:
           PAYLOAD: ${{ toJson(github.event.client_payload) }}
         run: echo "$PAYLOAD"
+        
